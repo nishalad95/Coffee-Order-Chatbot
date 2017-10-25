@@ -29,8 +29,12 @@
       "variables" : {
         "type" : "string",
         "greeting" : "string",
+        "drinkType" : "string",
+        "syrup" : "string",
+        "size" : "string",
+        "number" : "int",
         "name" : "string",
-        "drinkType" : "string"
+        "otherOptions" : "string"
       }
     },
     "error" : "Error State",
@@ -54,25 +58,68 @@
           "actions" : {
             "Tea" : "askTea",
             "Coffee" : "askCoffee",
-            "Hot Chocolate" : "askName"
+            "Hot Chocolate" : "askSyrup"
           }
         }
       },
       "askTea" : {
         "component" : "System.List",
         "properties" : {
-          "options" : "English Breakfast, Earl Grey",
+          "options" : "English Breakfast, Earl Grey, Green Tea, Chamomile",
           "prompt" : "Which tea would you like:",
           "variable" : "drinkType"
         },
-        "transitions" : { }
+        "transitions" : {
+          "actions" : {
+            "next" : "askSize"
+          }
+        }
       },
       "askCoffee" : {
         "component" : "System.List",
         "properties" : {
-          "options" : "Cappuccino, Latte",
+          "options" : "Cappuccino, Latte, Mocha, Americano, Chai Latte, Espresso, Double Espresso, Frappuccino",
           "prompt" : "Which coffee would you like:",
           "variable" : "drinkType"
+        },
+        "transitions" : { }
+      },
+      "switchOnDrinkType" : {
+        "component" : "System.Switch",
+        "properties" : {
+          "variable" : "drinkType",
+          "values" : [ "Espresso", "Double Espresso" ]
+        },
+        "transitions" : {
+          "actions" : {
+            "Espresso" : "askQuantity",
+            "Double Espresso" : "askQuantity"
+          }
+        }
+      },
+      "askSyrup" : {
+        "component" : "System.List",
+        "properties" : {
+          "options" : "Vanilla, Hazelnut, Caramel, Peppermint, None",
+          "prompt" : "Which syrup would you like?",
+          "variable" : "syrup"
+        },
+        "transitions" : { }
+      },
+      "askSize" : {
+        "component" : "System.List",
+        "properties" : {
+          "options" : "Small, Medium, Large",
+          "prompt" : "What size would you like to order?",
+          "variable" : "size"
+        },
+        "transitions" : { }
+      },
+      "askQuantity" : {
+        "component" : "System.Text",
+        "properties" : {
+          "prompt" : "How many would you like to order?",
+          "variable" : "number"
         },
         "transitions" : { }
       },
@@ -84,10 +131,40 @@
         },
         "transitions" : { }
       },
-      "done" : {
+      "processOrder" : {
         "component" : "System.Output",
         "properties" : {
-          "text" : "Thank you ${name.value}, your ${type.value}: ${drinkType.value} is being made!"
+          "text" : "Thank you ${name.value}, your order is being made!",
+          "keepTurn" : true
+        },
+        "transitions" : { }
+      },
+      "restart" : {
+        "component" : "System.List",
+        "properties" : {
+          "options" : "Make another order, Change order, Cancel order, None of the above",
+          "prompt" : "Would you like anything else?",
+          "variable" : "otherOptions"
+        },
+        "transitions" : { }
+      },
+      "switchOnRestartType" : {
+        "component" : "System.Switch",
+        "properties" : {
+          "variable" : "otherOptions",
+          "values" : [ "Make another order", "None of the above" ]
+        },
+        "transitions" : {
+          "actions" : {
+            "None of the above" : "thanks",
+            "Make another order" : "Start"
+          }
+        }
+      },
+      "thanks" : {
+        "component" : "System.Output",
+        "properties" : {
+          "text" : "Thanks for using this service! :-)"
         },
         "transitions" : { }
       },
