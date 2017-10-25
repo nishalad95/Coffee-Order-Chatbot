@@ -1,0 +1,166 @@
+{
+  "name" : "Coffee_IS",
+  "description" : "Bot for innovation space (please don't delete)",
+  "type" : "USER",
+  "intents" : [ {
+    "name" : "OrderDrink",
+    "paramsList" : [ ],
+    "type" : "NLPIntent"
+  }, {
+    "name" : "Greeting",
+    "paramsList" : [ ],
+    "type" : "NLPIntent"
+  } ],
+  "entities" : [ {
+    "name" : "DrinkType",
+    "type" : "ENUMVALUES",
+    "enumValues" : "Coffee,Tea,Hot Chocolate",
+    "ruleParameters" : null,
+    "parentEntity" : null,
+    "patternExpression" : null
+  } ],
+  "dialog" : [ {
+    "metadata" : {
+      "platformVersion" : "1.0"
+    },
+    "main" : true,
+    "name" : "Coffee_IS",
+    "context" : {
+      "variables" : {
+        "type" : "string",
+        "greeting" : "string",
+        "name" : "string",
+        "drinkType" : "string"
+      }
+    },
+    "error" : "Error State",
+    "states" : {
+      "Start" : {
+        "component" : "System.List",
+        "properties" : {
+          "options" : "Tea, Coffee, Hot Chocolate",
+          "prompt" : "Hi there! Please choose the drink you would like to order:",
+          "variable" : "type"
+        },
+        "transitions" : { }
+      },
+      "switchOnType" : {
+        "component" : "System.Switch",
+        "properties" : {
+          "variable" : "type",
+          "values" : [ "Tea", "Coffee", "Hot Chocolate" ]
+        },
+        "transitions" : {
+          "actions" : {
+            "Tea" : "askTea",
+            "Coffee" : "askCoffee",
+            "Hot Chocolate" : "askName"
+          }
+        }
+      },
+      "askTea" : {
+        "component" : "System.List",
+        "properties" : {
+          "options" : "English Breakfast, Earl Grey",
+          "prompt" : "Which tea would you like:",
+          "variable" : "drinkType"
+        },
+        "transitions" : { }
+      },
+      "askCoffee" : {
+        "component" : "System.List",
+        "properties" : {
+          "options" : "Cappuccino, Latte",
+          "prompt" : "Which coffee would you like:",
+          "variable" : "drinkType"
+        },
+        "transitions" : { }
+      },
+      "askName" : {
+        "component" : "System.Text",
+        "properties" : {
+          "prompt" : "What is your name?",
+          "variable" : "name"
+        },
+        "transitions" : { }
+      },
+      "done" : {
+        "component" : "System.Output",
+        "properties" : {
+          "text" : "Thank you ${name.value}, your ${type.value}: ${drinkType.value} is being made!"
+        },
+        "transitions" : { }
+      },
+      "Error State" : {
+        "component" : "System.Output",
+        "properties" : {
+          "text" : "Oops. Something went wrong. Try again.",
+          "keepTurn" : true
+        },
+        "transitions" : {
+          "next" : "Start"
+        }
+      }
+    }
+  } ],
+  "trainingDataList" : [ {
+    "sentence" : "I'd like to order coffee",
+    "intent" : "OrderDrink",
+    "namedEntities" : [ ]
+  }, {
+    "sentence" : "can i have a drink please?",
+    "intent" : "OrderDrink",
+    "namedEntities" : [ ]
+  }, {
+    "sentence" : "order drink",
+    "intent" : "OrderDrink",
+    "namedEntities" : [ ]
+  }, {
+    "sentence" : "I'd like to order a drink",
+    "intent" : "OrderDrink",
+    "namedEntities" : [ ]
+  }, {
+    "sentence" : "can I make an order?",
+    "intent" : "OrderDrink",
+    "namedEntities" : [ ]
+  }, {
+    "sentence" : "I'd like to order tea",
+    "intent" : "OrderDrink",
+    "namedEntities" : [ ]
+  }, {
+    "sentence" : "Hey",
+    "intent" : "Greeting",
+    "namedEntities" : [ ]
+  }, {
+    "sentence" : "Hello",
+    "intent" : "Greeting",
+    "namedEntities" : [ ]
+  }, {
+    "sentence" : "Hi there",
+    "intent" : "Greeting",
+    "namedEntities" : [ ]
+  }, {
+    "sentence" : "Hi",
+    "intent" : "Greeting",
+    "namedEntities" : [ ]
+  } ],
+  "channels" : [ {
+    "name" : "System_Bot_Test",
+    "description" : "Used by the BOT test feature. If it is disabled, the test UI will not work for this BOT.",
+    "enabled" : true,
+    "config" : {
+      "type" : "test"
+    }
+  } ],
+  "settings" : {
+    "createdOn" : "2017-10-24T09:33:17.629Z",
+    "updatedOn" : "2017-10-24T09:33:17.629Z",
+    "links" : null,
+    "settings" : {
+      "Multistage_Pipeline" : true,
+      "Verbose_Output" : false,
+      "Result_Size" : 10,
+      "Pipeline_Output_Size" : 100
+    }
+  }
+}
